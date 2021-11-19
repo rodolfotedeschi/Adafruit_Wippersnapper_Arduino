@@ -61,7 +61,7 @@ public:
   const char *io_username =
       NULL;                  /*!< Adafruit IO username, from config json. */
   const char *io_key = NULL; /*!< Adafruit IO password, from config json. */
-  bool *enable_deep_sleep = nullptr; /*!< Option to enable ESP32/S2 deep sleep mode, from config json. */ 
+  bool enable_deep_sleep = false; /*!< Option to enable ESP32/S2 deep sleep mode, from config json. */ 
   bool setNetwork; /*!< True if a network interface type was set up, False
                       otherwise. */
 

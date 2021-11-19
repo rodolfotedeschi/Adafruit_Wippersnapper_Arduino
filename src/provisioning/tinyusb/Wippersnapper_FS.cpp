@@ -440,12 +440,8 @@ void Wippersnapper_FS::parseSecrets() {
     fsHalt();
   }
 
-  // Optionally check if we enabled deep-sleep
+  // Check for deep sleep mode 
   enable_deep_sleep = doc["enable_deep_sleep"];
-  if (enable_deep_sleep != nullptr && enable_deep_sleep == true) {
-    writeErrorToBootOut("ENABLED: ESP32 Deep Sleep Mode");
-  }
-    
 
   // clear the document and release all memory from the memory pool
   doc.clear();
