@@ -287,8 +287,14 @@ void Wippersnapper_FS::createConfigFileSkel() {
   secretsFile.println("!!! ERROR: undefined board !!!");
 #endif
   secretsFile.flush();
-  secretsFile.print(
-      "HERE\",\n\t\t\"network_password\":\"YOUR_WIFI_PASS_HERE\"\n\t}\n}");
+  // Optional ESP32 Deep Sleep Mode
+#if defined(ARDUINO_MAGTAG29_ESP32S2) || defined(ARDUINO_METRO_ESP32S2) ||     \
+    defined(ARDUINO_FUNHOUSE_ESP32S2) || defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S2)
+    secretsFile.print("HERE\",\n\t\t\"network_password\":\"YOUR_WIFI_PASS_HERE\"\n\t},");
+    secretsFile.print("\n\t\"enable_deep_sleep\":false\n}");
+#else
+    secretsFile.print("HERE\",\n\t\t\"network_password\":\"YOUR_WIFI_PASS_HERE\"\n\t}\n}");
+#endif
   secretsFile.flush();
   secretsFile.close();
   writeErrorToBootOut(
