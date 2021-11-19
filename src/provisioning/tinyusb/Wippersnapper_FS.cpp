@@ -291,6 +291,7 @@ void Wippersnapper_FS::createConfigFileSkel() {
 #if defined(ARDUINO_MAGTAG29_ESP32S2) || defined(ARDUINO_METRO_ESP32S2) ||     \
     defined(ARDUINO_FUNHOUSE_ESP32S2) || defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S2)
     secretsFile.print("HERE\",\n\t\t\"network_password\":\"YOUR_WIFI_PASS_HERE\"\n\t},");
+    secretsFile.flush();
     secretsFile.print("\n\t\"enable_deep_sleep\":false\n}");
 #else
     secretsFile.print("HERE\",\n\t\t\"network_password\":\"YOUR_WIFI_PASS_HERE\"\n\t}\n}");
@@ -438,6 +439,13 @@ void Wippersnapper_FS::parseSecrets() {
         "ERROR: Network interface not detected in secrets.json file.");
     fsHalt();
   }
+
+  // Optionally check if we enabled deep-sleep
+  enable_deep_sleep = doc["enable_deep_sleep"];
+  if (enable_deep_sleep != nullptr && enable_deep_sleep == true) {
+    writeErrorToBootOut("ENABLED: ESP32 Deep Sleep Mode");
+  }
+    
 
   // clear the document and release all memory from the memory pool
   doc.clear();
