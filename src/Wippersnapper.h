@@ -42,7 +42,6 @@
 
 // ESP32-Specific Driver(s)
 #ifdef ARDUINO_ARCH_ESP32
-#include "components/ledc/drivers/ws_ledc_servo.h"
 #include "components/ledc/ws_ledc.h"
 #endif
 
