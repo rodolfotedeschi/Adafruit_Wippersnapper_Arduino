@@ -18,7 +18,8 @@
 #ifndef WS_ESP32_SERVO
 #define WS_ESP32_SERVO
 
-#include "Wippersnapper.h"
+//#include "Wippersnapper.h"
+#include <Arduino.h>
 
 // from https://github.com/arduino-libraries/Servo/blob/master/src/Servo.h
 #define MIN_PULSE_WIDTH 544  ///< The shortest pulse sent to a servo
@@ -63,5 +64,5 @@ private:
   int _minPulseWidth; ///< Servo's minimum pulse width, in uS.
   int _maxPulseWidth; ///< Servo's maximum pulse width, in uS.
 };
-extern Wippersnapper WS;
+// extern Wippersnapper WS;
 #endif // WS_ESP32_SERVO

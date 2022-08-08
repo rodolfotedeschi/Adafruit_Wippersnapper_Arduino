@@ -45,6 +45,8 @@
 #include "components/ledc/ws_ledc.h"
 #endif
 
+#include "components/servo/ws_servo.h"
+
 // External libraries
 #include "Adafruit_MQTT.h" // MQTT Client
 #include "Arduino.h"       // Wiring

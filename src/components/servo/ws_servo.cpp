@@ -31,7 +31,7 @@ ws_servo::ws_servo() {
     _servos[i].servoObj = nullptr;
   }
 
-  // TODO: create new instance of ws_ledc_servo for ESP32
+  // TODO: create new instance of ws_ledc_servo for ESP32, pass LEDC object?
 }
 
 /**************************************************************************/
@@ -40,9 +40,9 @@ ws_servo::ws_servo() {
 */
 /**************************************************************************/
 ws_servo::~ws_servo() {
-/*   for (int i = 0; i < MAX_SERVO_NUM; i++) {
+  for (int i = 0; i < MAX_SERVO_NUM; i++) {
     // de-allocate servo pins, if attached
     if (_servos[i].servoObj->attached())
       _servos[i].servoObj->detach();
-  } */
+  }
 }
