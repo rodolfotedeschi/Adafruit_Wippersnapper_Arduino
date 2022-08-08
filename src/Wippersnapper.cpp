@@ -52,9 +52,7 @@ Wippersnapper::Wippersnapper() {
   _err_sub = 0;
   _throttle_sub = 0;
 
-#ifdef ARDUINO_ARCH_ESP32
-  WS._ledc = new WipperSnapper_Component_LEDC();
-#endif
+
 };
 
 /**************************************************************************/
@@ -813,8 +811,10 @@ bool cbDecodeServoMsg(pb_istream_t *stream, const pb_field_t *field,
           "ERROR: Could not decode wippersnapper_servo_v1_ServoAttachReq");
       return false; // fail out if we can't decode the request
     }
-
-    // TODO!
+    // Dispatch servo attach request message
+    char *pinName = msgServoAttachReq.servo_pin + 1;
+    bool did_attach = WS._servoComponent->servo_attach(atoi(pinName), msgServoAttachReq.min_pulse_width, msgServoAttachReq.max_pulse_width, msgServoAttachReq.servo_freq);
+    // TODO: handle did_attach
   }
 
   return true;
@@ -1713,11 +1713,24 @@ void Wippersnapper::connect() {
   runNetFSM();
   publishPinConfigComplete();
   WS_DEBUG_PRINTLN("Hardware configured successfully!");
-  statusLEDFade(GREEN, 3);
+
+
+  WS_DEBUG_PRINTLN("Configuring WS Components...");
+
+  #ifdef ARDUINO_ARCH_ESP32
+  WS_DEBUG_PRINT("[ESP32-Only] LEDC Controller: ");
+  WS._ledc = new WipperSnapper_Component_LEDC();
+  WS_DEBUG_PRINTLN("OK!");
+  #endif
+
+  WS_DEBUG_PRINT("Servo: ");
+  WS._servoComponent = new ws_servo();
+  WS_DEBUG_PRINTLN("OK!");
 
   // Run application
   WS_DEBUG_PRINTLN(
       "Registration and configuration complete!\nRunning application...");
+  statusLEDFade(GREEN, 3);
 }
 
 /**************************************************************************/

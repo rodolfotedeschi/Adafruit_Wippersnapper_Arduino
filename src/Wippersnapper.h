@@ -172,6 +172,7 @@ class WipperSnapper_Component_I2C;
 #ifdef ARDUINO_ARCH_ESP32
 class WipperSnapper_Component_LEDC;
 #endif
+class ws_servo;
 
 /**************************************************************************/
 /*!
@@ -278,6 +279,7 @@ public:
   Wippersnapper_FS *_fileSystem; ///< Instance of Filesystem (native USB)
   WipperSnapper_LittleFS
       *_littleFS; ///< Instance of LittleFS Filesystem (non-native USB)
+  ws_servo *_servoComponent; ///< instance of servo component
 
   uint8_t _macAddr[6];  /*!< Unique network iface identifier */
   char sUID[13];        /*!< Unique network iface identifier */
