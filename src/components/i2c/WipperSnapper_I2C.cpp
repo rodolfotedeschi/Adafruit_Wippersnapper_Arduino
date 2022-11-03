@@ -83,6 +83,14 @@ WipperSnapper_Component_I2C::WipperSnapper_Component_I2C(
     _i2c->begin(msgInitRequest->i2c_pin_sda, msgInitRequest->i2c_pin_scl);
     _i2c->setClock(50000);
     _isInit = true;
+#elif defined(ARDUINO_ARCH_RP2040)
+    i2c_inst_t *_i2c2;
+    _i2c = new TwoWire(_i2c2, 0, 1);
+    //_i2c->setSDA(msgInitRequest->i2c_pin_sda);
+    //_i2c->setSCL(msgInitRequest->i2c_pin_scl);
+    _i2c->begin();
+    _i2c->setClock(50000);
+    _isInit = true;
 #else
     // SAMD
     _i2c = new TwoWire(&PERIPH_WIRE, msgInitRequest->i2c_pin_sda,

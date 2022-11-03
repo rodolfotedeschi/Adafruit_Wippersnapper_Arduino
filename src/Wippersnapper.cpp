@@ -1770,8 +1770,8 @@ void Wippersnapper::feedWDT() {
 */
 /*******************************************************/
 void Wippersnapper::enableWDT(int timeoutMS) {
-#ifndef ESP8266
-  Watchdog.disable();
+#if !defined(ESP8266) || !defined(ARDUINO_ARCH_RP2040)
+//  Watchdog.disable();
   if (Watchdog.enable(timeoutMS) == 0) {
     WS_DEBUG_PRINTLN("ERROR: WDT initialization failure!");
     setStatusLEDColor(LED_ERROR);

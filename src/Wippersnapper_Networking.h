@@ -21,7 +21,7 @@
 #include "network_interfaces/Wippersnapper_AIRLIFT.h"
 /** Nina-FW (adafruit fork) networking class */
 typedef Wippersnapper_AIRLIFT Wippersnapper_WiFi;
-#elif defined(ARDUINO_ARCH_ESP8266)
+#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_RP2040)
 #include "network_interfaces/Wippersnapper_ESP8266.h"
 /** ESP8266's networking class */
 typedef Wippersnapper_ESP8266 Wippersnapper_WiFi;
