@@ -515,6 +515,20 @@ bool WipperSnapper_Component_I2C::initI2CDevice(
     _adt7410->configureDriver(msgDeviceInitReq);
     drivers.push_back(_adt7410);
     WS_DEBUG_PRINTLN("ADT7410 Initialized Successfully!");
+  } else if (!strcmp("bh1745", msgDeviceInitReq->i2c_device_name))
+  {
+    _bh1745 = new WipperSnapper_I2C_Driver_BH1745(_i2c, i2cAddress);
+
+    if (!_bh1745->begin())
+    {
+      WS_DEBUG_PRINTLN("ERROR: Failed to initialize BH1745!");
+      _busStatusResponse = wippersnapper_i2c_v1_BusResponse_BUS_RESPONSE_DEVICE_INIT_FAIL;
+      return false;
+    }
+
+    _bh1745->configureDriver(msgDeviceInitReq);
+    drivers.push_back(_bh1745);
+    WS_DEBUG_PRINTLN("BH1745 Initialized Successfully!");
   } else {
     WS_DEBUG_PRINTLN("ERROR: I2C device type not found!")
     _busStatusResponse =
@@ -1238,6 +1252,30 @@ void WipperSnapper_Component_I2C::update() {
       } else {
         WS_DEBUG_PRINTLN("ERROR: Failed to get proximity sensor reading!");
       }
+    }
+
+    // Color sensor
+    curTime = millis();
+    if ((*iter)->getSensorColorPeriod() && curTime - (*iter)->getSensorColorPeriodPrv() > (*iter)->getSensorColorPeriod())
+    {
+      if ((*iter)->getEventColor(&event))
+      {
+        WS_DEBUG_PRINT("Sensor 0x");
+        WS_DEBUG_PRINTHEX((*iter)->getI2CAddress());
+        WS_DEBUG_PRINTLN("");
+        WS_DEBUG_PRINT("\tColor: R = ");
+        WS_DEBUG_PRINT(event.color.r);
+        WS_DEBUG_PRINT(" G = ");
+        WS_DEBUG_PRINT(event.color.g);
+        WS_DEBUG_PRINT(" B = ");
+        WS_DEBUG_PRINTLN(event.color.b);
+
+#warning TODO: even though all 24-bit integer values can fit into a 32-bit floating-point, this can be improved
+        fillEventMessage(&msgi2cResponse, event.color.rgba, wippersnapper_i2c_v1_SensorType_SENSOR_TYPE_COLOR);
+        (*iter)->setSensorColorPeriodPrv(curTime);
+      }
+      else
+        WS_DEBUG_PRINTLN("ERROR: Failed to get color sensor reading!");
     }
 
     // Did this driver obtain data from sensors?

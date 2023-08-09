@@ -133,6 +133,9 @@ public:
     case wippersnapper_i2c_v1_SensorType_SENSOR_TYPE_VOC_INDEX:
       _VOCIndexPeriod = sensorPeriod;
       break;
+    case wippersnapper_i2c_v1_SensorType_SENSOR_TYPE_COLOR:
+      _colorSensorPeriod = sensorPeriod;
+      break;
     default:
       break;
     }
@@ -1204,6 +1207,42 @@ public:
     setSensorProximityPeriod(period);
   }
 
+  /**************************** SENSOR_TYPE: COLOR *******************************/
+  /*******************************************************************************/
+  /*!
+      @brief    Base implementation - Returns the object color sensor's period, if set.
+      @returns  Time when the object light sensor should be polled, in seconds.
+  */
+  /*********************************************************************************/
+  virtual long getSensorColorPeriod() { return _colorSensorPeriod; }
+
+  /*********************************************************************************/
+  /*!
+      @brief    Base implementation - Returns the previous time interval at which the color sensor was queried last.
+      @returns  Time when the color sensor was last queried, in seconds.
+  */
+  /*********************************************************************************/
+  virtual long getSensorColorPeriodPrv() { return _colorSensorPeriodPrv; }
+
+  /*******************************************************************************/
+  /*!
+      @brief    Sets a timestamp for when the color sensor was queried.
+      @param    period
+                The time when the color sensor was queried last.
+  */
+  /*******************************************************************************/
+  virtual void setSensorColorPeriodPrv(long period) { _colorSensorPeriodPrv = period; }
+
+  /*******************************************************************************/
+  /*!
+      @brief    Base implementation - Reads a color sensor and converts the reading into the expected SI unit.
+      @param    colorEvent
+                Color sensor reading.
+      @returns  True if the sensor event was obtained successfully, False otherwise.
+  */
+  /*******************************************************************************/
+  virtual bool getEventColor(sensors_event_t *colorEvent) { return false; }
+
 protected:
   TwoWire *_i2c;           ///< Pointer to the I2C driver's Wire object
   uint16_t _sensorAddress; ///< The I2C driver's unique I2C address.
@@ -1291,6 +1330,8 @@ protected:
                                      ///< proximity sensor's value.
   long _proximitySensorPeriodPrv = 0L; ///< The time when the proximity sensor
                                        ///< was last read.
+  long _colorSensorPeriod = 0L;        ///< The time period between reading the color sensor's value.
+  long _colorSensorPeriodPrv = 0L;     ///< The time when the color sensor was last read.
 };
 
 #endif // WipperSnapper_I2C_Driver_H
